@@ -6,11 +6,11 @@ module.exports = class TaxesCalculate {
         perc: 0
       },
       {
-        max: 27794,
-        perc: 14
+        max: 25659,
+        perc: 11
       },
       {
-        max: 74517,
+        max: 73369,
         perc: 30
       },
       {
