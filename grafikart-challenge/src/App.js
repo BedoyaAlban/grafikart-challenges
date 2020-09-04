@@ -10,7 +10,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import React, { useState } from "react";
-import { Bearing, Calculate } from "../src/CalculateTaxes";
+import { Bearing, Calculate, TaxesBySlice } from "../src/CalculateTaxes";
 
 let canUseDOM = !!(
   typeof window !== "undefined" &&
@@ -45,7 +45,14 @@ const StyledTableRow = withStyles(theme => ({
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 700
+    minWidth: 100
+  },
+  container: {
+    width: "50%"
+  },
+  result: {
+    width: "60%",
+    margin: "auto"
   }
 });
 
@@ -53,23 +60,19 @@ const CustomizedTables = () => {
   const classes = useStyles();
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} className={classes.container}>
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Taxes Calculate</StyledTableCell>
-            <StyledTableCell align="right">Amount of Income</StyledTableCell>
-            <StyledTableCell align="right">Tax Percentages</StyledTableCell>
+            <StyledTableCell align="center">Amount of Income</StyledTableCell>
+            <StyledTableCell align="center">Tax Percentages</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {Bearing.map(row => (
             <StyledTableRow key={row.perc}>
-              <StyledTableCell component="th" scope="row">
-                {row.max}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.max}</StyledTableCell>
-              <StyledTableCell align="right">{row.perc}</StyledTableCell>
+              <StyledTableCell align="center">{row.max} €</StyledTableCell>
+              <StyledTableCell align="center">{row.perc} %</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
@@ -78,11 +81,15 @@ const CustomizedTables = () => {
   );
 };
 
+// Use fonctionnal component for testing with cucumber and Enzyme!
+
 const App = () => {
   const [income, setIncome] = useState(0);
   const [parts, setParts] = useState(1);
-
+  const classes = useStyles();
   const result = Calculate(parseInt(income), parseInt(parts));
+
+  const Taxes = TaxesBySlice(parseInt(income), parseInt(parts));
 
   return (
     <div className="App">
@@ -131,8 +138,32 @@ const App = () => {
           />
         </div>
       </form>
-      <CustomizedTables />
-      <div>{result}</div>
+      <div className="taxes-container">
+        <TableContainer component={Paper} className={classes.container}>
+          <Table className={classes.table} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell align="center">Bearing</StyledTableCell>
+                <StyledTableCell align="center">
+                  Amount of Taxes
+                </StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {Taxes.map((row, i) => (
+                <StyledTableRow key={row}>
+                  <StyledTableCell align="center">
+                    Amount for the n° {i + 1} bearing
+                  </StyledTableCell>
+                  <StyledTableCell align="center">{row} €</StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <CustomizedTables />
+      </div>
+      <div className={classes.result}>Amount of Taxes {result} € to pay</div>
     </div>
   );
 };

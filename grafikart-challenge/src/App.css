@@ -7,8 +7,11 @@
   pointer-events: none;
 }
 
-.data-form {
-  width: "25ch";
+.taxes-container {
+  display: flex;
+  flex-direction: row;
+  width: 60%;
+  margin: auto;
 }
 
 @media (prefers-reduced-motion: no-preference) {
