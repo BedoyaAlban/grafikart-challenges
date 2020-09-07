@@ -1,3 +1,4 @@
+import Checkbox from "@material-ui/core/Checkbox";
 import Paper from "@material-ui/core/Paper";
 //Material-UI
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -53,6 +54,9 @@ const useStyles = makeStyles({
   result: {
     width: "60%",
     margin: "auto"
+  },
+  inputContainer: {
+    margin: "10px"
   }
 });
 
@@ -85,11 +89,40 @@ const CustomizedTables = () => {
 
 const App = () => {
   const [income, setIncome] = useState(0);
-  const [parts, setParts] = useState(1);
+  const [childrens, setChildrens] = useState(0);
+  const [checked, setChecked] = useState(false);
   const classes = useStyles();
-  const result = Calculate(parseInt(income), parseInt(parts));
 
-  const Taxes = TaxesBySlice(parseInt(income), parseInt(parts));
+  let parts = 1;
+
+  if (checked) {
+    parts = 2;
+    if (checked && parseInt(childrens) > 3) {
+      parts = 5;
+    } else if (checked && parseInt(childrens) === 3) {
+      parts = 4;
+    } else if (checked && parseInt(childrens) >= 1) {
+      parts = 2 + parseInt(childrens) / 2;
+    }
+  }
+
+  if (!checked) {
+    parts = 1;
+    if (!checked && parseInt(childrens) > 3) {
+      parts = 4;
+    } else if (!checked && parseInt(childrens) === 3) {
+      parts = 3;
+    } else if (!checked && parseInt(childrens) >= 1) {
+      parts = 1 + parseInt(childrens) / 2;
+    }
+  }
+
+  const result = Calculate(parseInt(income), parts);
+  const Taxes = TaxesBySlice(parseInt(income) / parts);
+
+  const handleChange = event => {
+    setChecked(event.target.checked);
+  };
 
   return (
     <div className="App">
@@ -113,7 +146,7 @@ const App = () => {
         </Typography>
       </header>
       <form className="data-form" noValidate autoComplete="off">
-        <div>
+        <div className={classes.inputContainer}>
           <TextField
             id="outlined-number"
             label="Income"
@@ -127,14 +160,23 @@ const App = () => {
           />
           <TextField
             id="outlined-number"
-            label="Parts"
+            label="Number of childrens"
             type="number"
             InputLabelProps={{
               shrink: true
             }}
             variant="outlined"
-            onChange={e => setParts(e.target.value)}
-            defaultValue={parts}
+            defaultValue={childrens}
+            onChange={e => setChildrens(e.target.value)}
+          />
+        </div>
+        <div className={classes.inputContainer}>
+          <span>Married or Civil Union </span>
+          <Checkbox
+            checked={checked}
+            onChange={handleChange}
+            color="primary"
+            inputProps={{ "aria-label": "primary checkbox" }}
           />
         </div>
       </form>
@@ -163,7 +205,9 @@ const App = () => {
         </TableContainer>
         <CustomizedTables />
       </div>
-      <div className={classes.result}>Amount of Taxes {result} € to pay</div>
+      <div className={classes.result}>
+        {result ? `Amount of Taxes ${result} € to pay` : null}
+      </div>
     </div>
   );
 };
