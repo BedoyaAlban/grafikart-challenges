@@ -12,6 +12,7 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import React, { useState } from "react";
 import { Bearing, Calculate, TaxesBySlice } from "../src/CalculateTaxes";
+import { CalculateReverse } from "../src/ReverseCalculate";
 
 let canUseDOM = !!(
   typeof window !== "undefined" &&
@@ -91,6 +92,7 @@ const App = () => {
   const [income, setIncome] = useState(0);
   const [childrens, setChildrens] = useState(0);
   const [checked, setChecked] = useState(false);
+  const [taxe, setTaxe] = useState(0);
   const classes = useStyles();
 
   let parts = 1;
@@ -120,10 +122,14 @@ const App = () => {
   const result = Calculate(parseInt(income), parts);
   const Taxes = TaxesBySlice(parseInt(income) / parts);
 
+  // const Income = IncomeBySlice();
+  const reverseResult = CalculateReverse(3617, 1);
+
   const handleChange = event => {
     setChecked(event.target.checked);
   };
 
+  console.log(reverseResult);
   return (
     <div className="App">
       {/*<header className="App-header">
@@ -148,7 +154,7 @@ const App = () => {
       <form className="data-form" noValidate autoComplete="off">
         <div className={classes.inputContainer}>
           <TextField
-            id="outlined-number"
+            className="outlined-number"
             label="Income"
             type="number"
             InputLabelProps={{
@@ -159,7 +165,7 @@ const App = () => {
             defaultValue={income}
           />
           <TextField
-            id="outlined-number"
+            className="outlined-number"
             label="Number of childrens"
             type="number"
             InputLabelProps={{
@@ -207,6 +213,19 @@ const App = () => {
       </div>
       <div className={classes.result}>
         {result ? `Amount of Taxes ${result} € to pay` : null}
+      </div>
+      <div>
+        <TextField
+          className="outlined-number"
+          label="Taxes"
+          type="number"
+          InputLabelProps={{
+            shrink: true
+          }}
+          variant="outlined"
+          defaultValue={taxe}
+          onChange={e => setTaxe(e.target.value)}
+        />
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ Feature: The appliction to calculate the taxes
         When he uses the app
         Then taxes should be 3617
 
-    Scenario: Couple with 2 childrens and with 55000
+    Scenario: Couple with 2 childrens and with 55950
         Given a family composed of 3 parts and has an income of 55950
         When he uses the app
         Then taxes should be 2833
