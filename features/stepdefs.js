@@ -28,7 +28,7 @@ Given(
 );
 
 When("He uses the app", function() {
-  this.result = reverseCalculator.calculate(this.taxe, this.parts);
+  this.result = reverseCalculator.calculateReverse(this.taxe, this.parts);
 });
 
 Then("Income should be {int}", function(income) {

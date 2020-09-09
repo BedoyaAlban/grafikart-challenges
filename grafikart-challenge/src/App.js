@@ -1,4 +1,5 @@
 import Checkbox from "@material-ui/core/Checkbox";
+import InputAdornment from "@material-ui/core/InputAdornment";
 import Paper from "@material-ui/core/Paper";
 //Material-UI
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -29,8 +30,13 @@ if (canUseDOM) {
 
 const StyledTableCell = withStyles(theme => ({
   head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white
+    background: "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+    borderRadius: 3,
+    border: 0,
+    color: "white",
+    height: 48,
+    padding: "0 30px",
+    boxShadow: "0 3px 5px 2px rgba(33, 203, 243, .3)"
   },
   body: {
     fontSize: 14
@@ -54,10 +60,15 @@ const useStyles = makeStyles({
   },
   result: {
     width: "60%",
-    margin: "auto"
+    margin: "auto",
+    minHeight: "30px",
+    padding: "30px"
   },
   inputContainer: {
     margin: "10px"
+  },
+  reverse: {
+    margin: "1%"
   }
 });
 
@@ -121,15 +132,12 @@ const App = () => {
 
   const result = Calculate(parseInt(income), parts);
   const Taxes = TaxesBySlice(parseInt(income) / parts);
-
-  // const Income = IncomeBySlice();
-  const reverseResult = CalculateReverse(3617, 1);
+  const reverseTaxe = CalculateReverse(parseInt(taxe), parts);
 
   const handleChange = event => {
     setChecked(event.target.checked);
   };
 
-  console.log(reverseResult);
   return (
     <div className="App">
       {/*<header className="App-header">
@@ -159,6 +167,9 @@ const App = () => {
             type="number"
             InputLabelProps={{
               shrink: true
+            }}
+            InputProps={{
+              endAdornment: <InputAdornment position="end">€</InputAdornment>
             }}
             variant="outlined"
             onChange={e => setIncome(e.target.value)}
@@ -212,20 +223,43 @@ const App = () => {
         <CustomizedTables />
       </div>
       <div className={classes.result}>
-        {result ? `Amount of Taxes ${result} € to pay` : null}
+        Amount of Taxes <strong>{result ? result : 0} €</strong> to pay.
       </div>
-      <div>
-        <TextField
-          className="outlined-number"
-          label="Taxes"
-          type="number"
-          InputLabelProps={{
-            shrink: true
-          }}
-          variant="outlined"
-          defaultValue={taxe}
-          onChange={e => setTaxe(e.target.value)}
-        />
+      <div className={classes.reverse}>
+        <Typography variant="h4" gutterBottom>
+          Reverse Calculate:
+        </Typography>
+        <form className="data-form" noValidate autoComplete="off">
+          <div className={classes.inputContainer}>
+            <TextField
+              className="outlined-number"
+              label="Taxe"
+              type="number"
+              InputLabelProps={{
+                shrink: true
+              }}
+              InputProps={{
+                endAdornment: <InputAdornment position="end">€</InputAdornment>
+              }}
+              variant="outlined"
+              onChange={e => setTaxe(e.target.value)}
+              defaultValue={taxe}
+            />
+            <TextField
+              className="outlined-number"
+              label="Income"
+              type="number"
+              InputLabelProps={{
+                shrink: true
+              }}
+              InputProps={{
+                endAdornment: <InputAdornment position="end">€</InputAdornment>
+              }}
+              variant="outlined"
+              value={reverseTaxe ? Math.round(reverseTaxe) : 10065}
+            />
+          </div>
+        </form>
       </div>
     </div>
   );

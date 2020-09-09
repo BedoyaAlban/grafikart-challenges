@@ -1,43 +1,48 @@
-import { Bearing } from "./CalculateTaxes";
+export const TaxeBearing = [
+  {
+    min: 0,
+    max: 10064,
+    perc: 0
+  },
+  {
+    min: 10065,
+    max: 25659,
+    perc: 0.11
+  },
+  {
+    min: 25660,
+    max: 73369,
+    perc: 0.3
+  },
+  {
+    min: 73370,
+    max: 157806,
+    perc: 0.41
+  },
+  {
+    min: 157807,
+    max: Infinity,
+    perc: 0.45
+  }
+];
 
 export const CalculateReverse = (taxe, parts) => {
-  const taxesPart = taxe / parts;
-  const result = IncomeBySlice(taxesPart);
-  const idxIncome = result.length - 1;
-  const sum = result.slice(idxIncome).toString();
-  const income =
-    (parseInt(sum) * 100) / Bearing[idxIncome].perc +
-    Bearing[idxIncome - 1].max +
-    1;
-  return income;
+  const taxePart = taxe / parts;
+  return IncomeBySlice(taxePart) * parts;
 };
 
 export const IncomeBySlice = taxesPart => {
-  let i = 0;
-  const slices = [];
-  let counted = 0;
-  while (counted < taxesPart) {
-    const { max: limit, perc } = Bearing[i];
-    let income;
-    if (i === 0) {
-      counted = ((Bearing[i + 1].max - limit) * perc) / 100;
+  let taxe = taxesPart;
+  let income = 0;
+  TaxeBearing.every(b => {
+    const bearing = (b.max - b.min) * b.perc;
+    if (taxe >= bearing) {
+      taxe -= bearing;
+      return true;
     } else {
-      counted = ((limit - Bearing[i - 1].max - 1) * perc) / 100;
+      income = taxe / b.perc + b.min;
+      return false;
     }
-    if (taxesPart > counted) {
-      income = counted;
-    } else if (taxesPart < counted) {
-      income = Math.round(
-        taxesPart -
-          ((Bearing[i - 1].max - Bearing[i - 2].max - 1) *
-            Bearing[i - 1].perc) /
-            100
-      );
-    } else {
-      income = 0;
-    }
-    slices.push(income);
-    i++;
-  }
-  return slices;
+  });
+  return income;
 };
