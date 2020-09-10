@@ -43,8 +43,10 @@ You will also see any lint errors in the console.
 
 ### `yarn test` or `npm test`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Becareful this project is using Enzyme and Cucumber to run the tests you must have a function component.
+If you wanna know more you can see :
+[Enzyme](https://enzymejs.github.io/enzyme/)
+[Cucumber](https://cucumber.io/docs/guides/10-minute-tutorial/)
 
 ### `yarn build` or `npm build`
 
