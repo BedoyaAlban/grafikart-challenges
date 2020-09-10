@@ -30,7 +30,7 @@ export const CalculateReverse = (taxe, parts) => {
   const taxePart = taxe / parts;
   return IncomeBySlice(taxePart) * parts;
 };
-
+// Check for every bearing to find the amount to return
 export const IncomeBySlice = taxesPart => {
   let taxe = taxesPart;
   let income = 0;

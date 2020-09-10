@@ -20,7 +20,7 @@ export const Bearing = [
     perc: 45
   }
 ];
-
+// Loop to find where the bearing of tax the users are.
 export const TaxesBySlice = incomePart => {
   let counted = 0;
   let i = 0;
@@ -44,7 +44,7 @@ export const TaxesBySlice = incomePart => {
   }
   return slices;
 };
-
+// Obtain the final result by adding all the value inside the array of taxes by bearing.
 export const Calculate = (income, parts) => {
   const incomePart = income / parts;
   return Math.round(
