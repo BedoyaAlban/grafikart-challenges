@@ -29,7 +29,7 @@ Pour l'exercice final on prendra le problème en sens inverse et on permettra à
 
 Before you must install dependencies:
 
-### `npm i` or `yarn add`
+### `npm i` or `yarn install`
 
 In the project grafikart-challenge/, you can run:
 
